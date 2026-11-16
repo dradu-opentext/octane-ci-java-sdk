@@ -31,8 +31,10 @@
  */
 package com.hp.octane.integrations.executor.converters;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import com.hp.octane.integrations.OctaneClient;
 import com.hp.octane.integrations.OctaneConfiguration;
 import com.hp.octane.integrations.OctaneSDK;
@@ -114,14 +116,16 @@ public class MfMBTConverter extends MfUftConverter {
     }
 
     private static boolean shouldRetrieveMbtData(List<TestToRunData> tests) {
-        return tests.get(0).getParameters().get(MBT_DATA).equals(MBT_DATA_NOT_INCLUDED);
+        return tests.getFirst().getParameters().get(MBT_DATA).equals(MBT_DATA_NOT_INCLUDED);
     }
 
     private static Map<String, String> parseSuiteRunDataJson(String responseJson) {
         try {
-            ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            ObjectMapper objectMapper = JsonMapper.builder()
+                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                    .build();
             return objectMapper.readValue(responseJson, Map.class);
-        } catch (IOException e) {
+        } catch (JacksonException e) {
             throw new IllegalArgumentException("Invalid suite run data format: " + e.getMessage(), e);
         }
     }

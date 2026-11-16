@@ -31,8 +31,8 @@
  */
 package com.hp.octane.integrations.uft.ufttestresults;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.dataformat.xml.XmlMapper;
 import com.hp.octane.integrations.dto.tests.TestRunResult;
 import com.hp.octane.integrations.uft.ufttestresults.schema.*;
 
@@ -88,8 +88,8 @@ public class UftTestResultsUtils {
                         .trim();
 
                 //last parent name might be as error message - in this case - don't show last parent
-                if (!parents.isEmpty() && error.startsWith(parents.get(parents.size() - 1))) {
-                    parents.remove(parents.size() - 1);
+                if (!parents.isEmpty() && error.startsWith(parents.getLast())) {
+                    parents.removeLast();
                 }
                 errors.add(new UftResultStepData(parents, node.getType(), node.getData().getResult(), error, node.getData().getDuration()));
             }
@@ -150,8 +150,9 @@ public class UftTestResultsUtils {
 
     public static <T> T fromXml(File xml, Class<T> clazz) {
         try {
-            XmlMapper xmlMapper = new XmlMapper();
-            xmlMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+            XmlMapper xmlMapper = XmlMapper.builder()
+                    .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+                    .build();
             T obj = xmlMapper.readValue(xml, clazz);
 
             return obj;

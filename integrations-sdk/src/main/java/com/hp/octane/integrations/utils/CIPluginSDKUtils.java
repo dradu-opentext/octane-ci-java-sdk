@@ -31,7 +31,7 @@
  */
 package com.hp.octane.integrations.utils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import com.hp.octane.integrations.OctaneSDK;
 import com.hp.octane.integrations.dto.causes.CIEventCause;
 import com.hp.octane.integrations.dto.causes.CIEventCauseType;
@@ -165,7 +165,7 @@ public class CIPluginSDKUtils {
 		if (configurer != null) {
 			proxySupplier = configurer.pluginServices::getProxyConfiguration;
 		} else if (OctaneSDK.hasClients()) {
-			proxySupplier = OctaneSDK.getClients().get(0).getRestService().getProxySupplier();
+			proxySupplier = OctaneSDK.getClients().getFirst().getRestService().getProxySupplier();
 		} else {
 			return null;
 		}

@@ -32,8 +32,8 @@
 package com.hp.octane.integrations.executor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
@@ -93,28 +93,28 @@ public class TestsToRunConverterTest {
     public void customConverterJsonTest() {
         String actual = converterTest(JUnit4, v2MavenFormatRawData);
 
-        Assert.assertEquals(outputMavenResult, actual);
+        Assertions.assertEquals(outputMavenResult, actual);
     }
 
     @Test
     public void customConverterStringTest() {
         String actual = converterTest(JUnit4, v1MavenFormatRawData);
 
-        Assert.assertEquals(outputMavenResult, actual);
+        Assertions.assertEquals(outputMavenResult, actual);
     }
 
     @Test
     public void uftConverterJsonTest() {
         String actual = converterTest(MF_UFT, v2UFTFormatRawData);
 
-        Assert.assertEquals(outputUFTResult, actual);
+        Assertions.assertEquals(outputUFTResult, actual);
     }
 
     @Test
     public void uftConverterStringTest() {
         String actual = converterTest(MF_UFT, v1UFTFormatRawData);
 
-        Assert.assertEquals(outputUFTResult, actual);
+        Assertions.assertEquals(outputUFTResult, actual);
     }
 
     @Test
@@ -133,12 +133,12 @@ public class TestsToRunConverterTest {
                 .getConvertedTestsString();
 
         ObjectMapper objectMapper = new ObjectMapper();
-        Assert.assertEquals(objectMapper.readTree(MI_AGENT_EXPECTED_MANIFEST), objectMapper.readTree(actual));
+        Assertions.assertEquals(objectMapper.readTree(MI_AGENT_EXPECTED_MANIFEST), objectMapper.readTree(actual));
 
-        Assert.assertEquals("Google Chrome", objectMapper.readTree(actual)
+        Assertions.assertEquals("Google Chrome", objectMapper.readTree(actual)
             .path("data").get(0)
             .path("au_tester_configuration").path("browser").path("BROWSER_NAME").asText());
-        Assert.assertEquals("sa@nga", objectMapper.readTree(actual)
+        Assertions.assertEquals("sa@nga", objectMapper.readTree(actual)
             .path("data").get(1)
             .path("run_by").path("full_name").asText());
     }

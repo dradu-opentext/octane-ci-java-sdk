@@ -32,7 +32,7 @@
 
 package com.hp.octane.integrations.services.pullrequestsandbranches.github;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import tools.jackson.core.JacksonException;
 import com.hp.octane.integrations.dto.DTOFactory;
 import com.hp.octane.integrations.dto.connectivity.HttpMethod;
 import com.hp.octane.integrations.dto.connectivity.OctaneRequest;
@@ -218,7 +218,7 @@ public abstract class GithubV3FetchHandler extends FetchHandler {
                             .setUser(getUserName(commit.getCommit().getCommitter().getEmail(), commit.getCommit().getCommitter().getName()))
                             .setUserEmail(commit.getCommit().getCommitter().getEmail())
                             .setTime(FetchUtils.convertISO8601DateStringToLong(commit.getCommit().getCommitter().getDate()))
-                            .setParentRevId(commit.getParents().get(0).getSha());
+                            .setParentRevId(commit.getParents().getFirst().getSha());
                     dtoCommits.add(dtoCommit);
                 }
 
@@ -365,7 +365,7 @@ public abstract class GithubV3FetchHandler extends FetchHandler {
 
                 //remove exceeding items
                 while (result.size() > maxTotal) {
-                    result.remove(result.size() - 1);
+                    result.removeLast();
                     finished = true;
                 }
             } while (!finished);
@@ -430,7 +430,7 @@ public abstract class GithubV3FetchHandler extends FetchHandler {
     }
 
     @Override
-    public SCMRepositoryLinks parseSCMRepositoryLinks(String responseBody) throws JsonProcessingException {
+    public SCMRepositoryLinks parseSCMRepositoryLinks(String responseBody) throws JacksonException {
         Repo repo = com.hp.octane.integrations.services.pullrequestsandbranches.github.JsonConverter.convert(responseBody, Repo.class);
         SCMRepositoryLinks links = dtoFactory.newDTO(SCMRepositoryLinks.class).setHttpUrl(repo.getClone_url()).setSshUrl(repo.getSsh_url());
         return links;

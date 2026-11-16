@@ -32,7 +32,7 @@
 package com.hp.octane.integrations.services.rest;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import tools.jackson.core.JacksonException;
 import com.hp.octane.integrations.OctaneConfiguration;
 import com.hp.octane.integrations.OctaneSDK;
 import com.hp.octane.integrations.dto.DTOFactory;
@@ -446,7 +446,7 @@ final class OctaneRestClientImpl implements OctaneRestClient {
 					.setEntity(loginApiJson);
 			loginRequest = requestBuilder.build();
 			return loginRequest;
-		} catch (JsonProcessingException jpe) {
+		} catch (JacksonException jpe) {
 			throw new IOException("failed to serialize login content", jpe);
 		}
 	}
@@ -455,8 +455,7 @@ final class OctaneRestClientImpl implements OctaneRestClient {
 		TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
 		tmf.init((KeyStore) null);
 		TrustManager[] tmArr = tmf.getTrustManagers();
-		if (tmArr.length == 1 && tmArr[0] instanceof X509TrustManager) {
-			X509TrustManager defaultTm = (X509TrustManager) tmArr[0];
+		if (tmArr.length == 1 && tmArr[0] instanceof X509TrustManager defaultTm) {
 			TrustManager myTM = new X509TrustManager() {
 				public X509Certificate[] getAcceptedIssuers() {
 					return defaultTm.getAcceptedIssuers();
