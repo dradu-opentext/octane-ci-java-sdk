@@ -9,8 +9,8 @@
  */
 package com.hp.octane.integrations.executor;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 import com.hp.octane.integrations.OctaneClient;
 import com.hp.octane.integrations.OctaneConfiguration;
 import com.hp.octane.integrations.OctaneSDK;
@@ -19,10 +19,10 @@ import com.hp.octane.integrations.executor.converters.MfMIAgentConverter;
 import com.hp.octane.integrations.services.configuration.ConfigurationService;
 import com.hp.octane.integrations.services.rest.OctaneRestClient;
 import com.hp.octane.integrations.services.rest.RestService;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -135,7 +135,7 @@ public class MfMIAgentConverterEnrichmentTest {
     private OctaneConfiguration realConfig;
     private Map<OctaneConfiguration, OctaneClient> sdkClientsMap;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         mockClient = createMock(OctaneClient.class);
         mockRestClient = createMock(OctaneRestClient.class);
@@ -148,7 +148,7 @@ public class MfMIAgentConverterEnrichmentTest {
         sdkClientsMap = (Map<OctaneConfiguration, OctaneClient>) f.get(null);
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         if (realConfig != null) {
             sdkClientsMap.remove(realConfig);
@@ -177,28 +177,28 @@ public class MfMIAgentConverterEnrichmentTest {
         converter.enrichTestsData(tests, globalParams());
 
         JsonNode run1 = MAPPER.readTree(test1.getParameter("manualRunData"));
-        Assert.assertEquals("1042", run1.path("id").asText());
-        Assert.assertEquals("tsMIAgent", run1.path("name").asText());
-        Assert.assertEquals("Login flow", run1.path("test_name").asText());
-        Assert.assertEquals(1, run1.path("order_in_suite_run").asInt());
-        Assert.assertEquals("run_manual", run1.path("subtype").asText());
-        Assert.assertFalse(run1.path("has_attachments").asBoolean(true));
-        Assert.assertEquals("5001", run1.path("parent_suite").path("id").asText());
-        Assert.assertEquals("Google Chrome", run1.path("au_tester_configuration").path("browser").path("BROWSER_NAME").asText());
-        Assert.assertEquals(3, run1.path("au_tester_configuration").path("agent").path("MAX_FAILURES").asInt());
-        Assert.assertEquals("In Progress", run1.path("native_status").path("name").asText());
-        Assert.assertEquals("sa@nga", run1.path("run_by").path("full_name").asText());
-        Assert.assertTrue(run1.has("run_steps"));
-        Assert.assertEquals("run_step", run1.path("run_steps").path("data").get(0).path("type").asText());
-        Assert.assertEquals("Normal", run1.path("run_steps").path("data").get(0).path("step_type").path("name").asText());
-        Assert.assertEquals("test_manual", run1.path("test").path("subtype").asText());
+        Assertions.assertEquals("1042", run1.path("id").asText());
+        Assertions.assertEquals("tsMIAgent", run1.path("name").asText());
+        Assertions.assertEquals("Login flow", run1.path("test_name").asText());
+        Assertions.assertEquals(1, run1.path("order_in_suite_run").asInt());
+        Assertions.assertEquals("run_manual", run1.path("subtype").asText());
+        Assertions.assertFalse(run1.path("has_attachments").asBoolean(true));
+        Assertions.assertEquals("5001", run1.path("parent_suite").path("id").asText());
+        Assertions.assertEquals("Google Chrome", run1.path("au_tester_configuration").path("browser").path("BROWSER_NAME").asText());
+        Assertions.assertEquals(3, run1.path("au_tester_configuration").path("agent").path("MAX_FAILURES").asInt());
+        Assertions.assertEquals("In Progress", run1.path("native_status").path("name").asText());
+        Assertions.assertEquals("sa@nga", run1.path("run_by").path("full_name").asText());
+        Assertions.assertTrue(run1.has("run_steps"));
+        Assertions.assertEquals("run_step", run1.path("run_steps").path("data").get(0).path("type").asText());
+        Assertions.assertEquals("Normal", run1.path("run_steps").path("data").get(0).path("step_type").path("name").asText());
+        Assertions.assertEquals("test_manual", run1.path("test").path("subtype").asText());
 
         JsonNode run2 = MAPPER.readTree(test2.getParameter("manualRunData"));
-        Assert.assertEquals("1043", run2.path("id").asText());
-        Assert.assertEquals("Checkout flow", run2.path("test_name").asText());
-        Assert.assertEquals("5001", run2.path("parent_suite").path("id").asText());
-        Assert.assertEquals(2, run2.path("run_steps").path("data").size());
-        Assert.assertEquals("Validate", run2.path("run_steps").path("data").get(1).path("step_type").path("name").asText());
+        Assertions.assertEquals("1043", run2.path("id").asText());
+        Assertions.assertEquals("Checkout flow", run2.path("test_name").asText());
+        Assertions.assertEquals("5001", run2.path("parent_suite").path("id").asText());
+        Assertions.assertEquals(2, run2.path("run_steps").path("data").size());
+        Assertions.assertEquals("Validate", run2.path("run_steps").path("data").get(1).path("step_type").path("name").asText());
     }
 
     @Test
@@ -221,12 +221,12 @@ public class MfMIAgentConverterEnrichmentTest {
         converter.enrichTestsData(Collections.singletonList(test), globalParams());
 
         JsonNode node = MAPPER.readTree(test.getParameter("manualRunData"));
-        Assert.assertEquals("1042", node.path("id").asText());
-        Assert.assertEquals("tsMIAgent", node.path("name").asText());
-        Assert.assertEquals("run_manual", node.path("subtype").asText());
-        Assert.assertEquals("5001", node.path("parent_suite").path("id").asText());
-        Assert.assertEquals("sa@nga", node.path("run_by").path("full_name").asText());
-        Assert.assertFalse(node.has("au_tester_configuration"));
+        Assertions.assertEquals("1042", node.path("id").asText());
+        Assertions.assertEquals("tsMIAgent", node.path("name").asText());
+        Assertions.assertEquals("run_manual", node.path("subtype").asText());
+        Assertions.assertEquals("5001", node.path("parent_suite").path("id").asText());
+        Assertions.assertEquals("sa@nga", node.path("run_by").path("full_name").asText());
+        Assertions.assertFalse(node.has("au_tester_configuration"));
     }
 
     @Test
@@ -243,12 +243,12 @@ public class MfMIAgentConverterEnrichmentTest {
         replay(mockClient, mockRestClient, mockRestService, mockConfigService);
         sdkClientsMap.put(realConfig, mockClient);
 
-        IllegalArgumentException ex = Assert.assertThrows(
+        IllegalArgumentException ex = Assertions.assertThrows(
                 IllegalArgumentException.class,
                 () -> new MfMIAgentConverter().enrichTestsData(Collections.singletonList(test), globalParams())
         );
 
-        Assert.assertEquals("Missing runId parameter for MI Agent test 'Bad test'", ex.getMessage());
+        Assertions.assertEquals("Missing runId parameter for MI Agent test 'Bad test'", ex.getMessage());
     }
 
     // --- Helpers ---

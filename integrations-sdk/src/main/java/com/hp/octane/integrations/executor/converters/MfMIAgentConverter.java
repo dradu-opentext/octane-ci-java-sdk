@@ -1,9 +1,10 @@
 package com.hp.octane.integrations.executor.converters;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ArrayNode;
+import tools.jackson.databind.node.ObjectNode;
 import com.hp.octane.integrations.OctaneClient;
 import com.hp.octane.integrations.OctaneConfiguration;
 import com.hp.octane.integrations.OctaneSDK;
@@ -63,7 +64,7 @@ public class MfMIAgentConverter extends TestsToRunConverter {
 
                 try {
                     runs.add(OBJECT_MAPPER.readTree(manualRunData));
-                } catch (IOException e) {
+                } catch (JacksonException e) {
                     throw new IllegalArgumentException("Invalid MI Agent run data for test '" + test.getTestName() + "'", e);
                 }
             }
@@ -73,7 +74,7 @@ public class MfMIAgentConverter extends TestsToRunConverter {
         manifest.put("total_count", runs.size());
         try {
             return OBJECT_MAPPER.writeValueAsString(manifest);
-        } catch (IOException e) {
+        } catch (JacksonException e) {
             throw new IllegalArgumentException("Failed to serialize MI Agent execution manifest", e);
         }
     }
@@ -101,7 +102,7 @@ public class MfMIAgentConverter extends TestsToRunConverter {
 
             try {
                 test.addParameters(MANUAL_RUN_DATA_PARAMETER, OBJECT_MAPPER.writeValueAsString(runNode));
-            } catch (IOException e) {
+            } catch (JacksonException e) {
                 throw new IllegalArgumentException("Failed to store MI Agent run data for test '" + test.getTestName() + "'", e);
             }
         }
@@ -200,7 +201,7 @@ public class MfMIAgentConverter extends TestsToRunConverter {
                 }
             }
             return runsById;
-        } catch (IOException e) {
+        } catch (JacksonException e) {
             throw new IllegalArgumentException("Failed to parse MI Agent runs response", e);
         }
     }
